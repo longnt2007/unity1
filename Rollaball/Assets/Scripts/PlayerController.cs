@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public float raylength;
     public LayerMask layerMask;
     public Vector3 moveToPostion;
+    public float moveSpeed;
 
     // Start is called before the first frame update
     void Start()
@@ -62,7 +63,7 @@ public class PlayerController : MonoBehaviour
 
         if(this.transform.position != moveToPostion)
         {
-            this.transform.position = new Vector3(moveToPostion.x, 0.5f, moveToPostion.z);
+            this.transform.position = Vector3.MoveTowards(this.transform.position, moveToPostion, moveSpeed * Time.deltaTime );
         }
     }
 

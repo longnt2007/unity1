@@ -1319,6 +1319,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   moveToPostion: {x: 0, y: 0, z: 0}
+  moveSpeed: 10
 --- !u!54 &963077729
 Rigidbody:
   m_ObjectHideFlags: 0
