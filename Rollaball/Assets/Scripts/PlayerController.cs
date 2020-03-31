@@ -56,7 +56,7 @@ public class PlayerController : MonoBehaviour
                 
                 //if(moveToPostion == this.transform.position)
                 {
-                    moveToPostion = hit.point;
+                    moveToPostion = new Vector3(hit.point.x, 0.5f, hit.point.z);
                 }
             }
         }
