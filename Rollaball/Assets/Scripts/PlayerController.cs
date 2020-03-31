@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
@@ -14,6 +15,10 @@ public class PlayerController : MonoBehaviour
     public Text winText;
     private int count;
 
+    public float raylength;
+    public LayerMask layerMask;
+    public Vector3 moveToPostion;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +27,8 @@ public class PlayerController : MonoBehaviour
         jump = new Vector3(0.0f, 2.0f, 0.0f);
         SetCountText();
         winText.text = "";
+
+        moveToPostion = this.transform.position;
     }
 
     void OnCollisionStay()
@@ -33,6 +40,30 @@ public class PlayerController : MonoBehaviour
     {
         rb.AddForce(jump * jumpForce, ForceMode.Impulse);
         isGround = false;
+    }
+
+    void Update()
+    {
+        if(Input.GetMouseButtonDown(0))
+        {
+            //Debug.Log("Mouse click");
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if(Physics.Raycast(ray,out hit, raylength, layerMask))
+            {
+                Debug.Log(hit.point.x.ToString("F3") + "/" + hit.point.y.ToString("F3"));
+                
+                //if(moveToPostion == this.transform.position)
+                {
+                    moveToPostion = hit.point;
+                }
+            }
+        }
+
+        if(this.transform.position != moveToPostion)
+        {
+            this.transform.position = new Vector3(moveToPostion.x, 0.5f, moveToPostion.z);
+        }
     }
 
     void FixedUpdate()

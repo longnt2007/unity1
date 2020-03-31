@@ -1314,6 +1314,11 @@ MonoBehaviour:
   isGround: 0
   countText: {fileID: 232581247}
   winText: {fileID: 1785134850}
+  raylength: 100
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  moveToPostion: {x: 0, y: 0, z: 0}
 --- !u!54 &963077729
 Rigidbody:
   m_ObjectHideFlags: 0
