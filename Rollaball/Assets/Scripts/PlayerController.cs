@@ -156,6 +156,7 @@ public class PlayerController : MonoBehaviour
         if (pickup != null) {
             pickup.transform.position = moveToPostion;
             pickup.SetActive(true);
+            pickup.GetComponent<MeshRenderer>().material.color = new Color(Random.value, Random.value, Random.value);
             return true;
         }                
         return false;    
