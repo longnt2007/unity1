@@ -63,22 +63,11 @@ public class PlayerController : MonoBehaviour
             if(Physics.Raycast(ray,out hit, raylength, layerMask))
             {
                 //Debug.Log("Spawn:" + hit.point.x.ToString("F3") + "/" + hit.point.y.ToString("F3"));
-                
-                //if(moveToPostion == this.transform.position)
-                {
-                    moveToPostion = new Vector3(hit.point.x, 0.5f, hit.point.z);
-                    spawnPosArray[currentSpawn++] = moveToPostion;
-                    //GameObject spawnPickup = Instantiate(myPrefab, new Vector3(hit.point.x, 0.5f, hit.point.z), Quaternion.identity);
-                    //spawnPickup.GetComponent<MeshRenderer>().material.color = new Color(Random.value, Random.value, Random.value);
-                    SpawnPool(moveToPostion);
-                }
+                moveToPostion = new Vector3(hit.point.x, 0.5f, hit.point.z);
+                spawnPosArray[currentSpawn++] = moveToPostion;
+                SpawnPool(moveToPostion);
             }
         }
-
-        //if(this.transform.position != moveToPostion)
-        //{
-            //this.transform.position = Vector3.MoveTowards(this.transform.position, moveToPostion, moveSpeed * Time.deltaTime );
-        //}
 
         if(currentSpawn > currentMove)
         {
@@ -106,8 +95,8 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Got " + other.gameObject.tag);
         if(other.gameObject.CompareTag("Pick Up"))
         {
-            other.gameObject.SetActive(false);
-            //Destroy(other.gameObject);
+            //other.gameObject.SetActive(false);
+            other.gameObject.Kill();
             count++;
             currentMove++;
             SetCountText();
@@ -125,11 +114,9 @@ public class PlayerController : MonoBehaviour
 
     void SpawnPool(Vector3 pos)
     {
-        Debug.Log("SpawnPool");
-        GameObject pickup = ObjectPooler.SharedInstance.GetPooledObject(); 
-        Debug.Log("SpawnPool222");
+        //GameObject pickup = ObjectPooler.SharedInstance.GetPooledObject(); 
+        GameObject pickup = myPrefab.Spawn();
         if (pickup != null) {
-            Debug.Log("SpawnPool333");
             pickup.transform.position = moveToPostion;
             pickup.SetActive(true);
         }                    
