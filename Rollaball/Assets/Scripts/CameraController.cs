@@ -8,7 +8,7 @@ public class CameraController : MonoBehaviour
     public GameObject player;
 
     private Vector3 offset;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +18,6 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        transform.position = player.transform.position + offset;
+        transform.position = new Vector3(player.transform.position.x + offset.x, offset.y, player.transform.position.z + offset.z);
     }
 }

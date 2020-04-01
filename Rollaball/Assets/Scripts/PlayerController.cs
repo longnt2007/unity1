@@ -26,6 +26,8 @@ public class PlayerController : MonoBehaviour
     private int currentSpawn;
     private Vector3[] spawnPosArray;
 
+    Animator m_Animator;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +42,8 @@ public class PlayerController : MonoBehaviour
         currentMove = 0;
         currentSpawn = 0;
         spawnPosArray = new Vector3[maxSpawn];
+
+        m_Animator = gameObject.GetComponent<Animator>();
     }
 
     void OnCollisionStay()
@@ -75,6 +79,17 @@ public class PlayerController : MonoBehaviour
         if(currentSpawn > currentMove)
         {
             this.transform.position = Vector3.MoveTowards(this.transform.position, spawnPosArray[currentMove], moveSpeed * Time.deltaTime );
+
+            if (m_Animator.GetBool("isIdle"))
+            {
+                Debug.Log("isIdle = True");
+            }
+            else
+            {
+                Debug.Log("isIdle = False");
+            }
+            //m_Animator.SetBool("isIdle", true);
+            //m_Animator.SetBool("isIdle", false);
         }
     }
 
@@ -95,7 +110,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Got " + other.gameObject.tag);
+        //Debug.Log("Got " + other.gameObject.tag);
         if(other.gameObject.CompareTag("Pick Up"))
         {
             //other.gameObject.SetActive(false);
