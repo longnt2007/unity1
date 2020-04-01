@@ -27,6 +27,8 @@ public class PlayerController : MonoBehaviour
     private Vector3[] spawnPosArray;
 
     Animator m_Animator;
+    Vector3 localPos;
+    bool wasPlaying;
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +46,7 @@ public class PlayerController : MonoBehaviour
         spawnPosArray = new Vector3[maxSpawn];
 
         m_Animator = gameObject.GetComponent<Animator>();
+        localPos = this.transform.position;
     }
 
     void OnCollisionStay()
@@ -74,12 +77,8 @@ public class PlayerController : MonoBehaviour
                     spawnPosArray[currentSpawn++] = moveToPostion;
                 }
             }
-        }
 
-        if(currentSpawn > currentMove)
-        {
-            this.transform.position = Vector3.MoveTowards(this.transform.position, spawnPosArray[currentMove], moveSpeed * Time.deltaTime );
-
+            /*
             if (m_Animator.GetBool("isIdle"))
             {
                 Debug.Log("isIdle = True");
@@ -88,8 +87,17 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log("isIdle = False");
             }
-            //m_Animator.SetBool("isIdle", true);
-            //m_Animator.SetBool("isIdle", false);
+            */
+        }
+
+        if(currentSpawn > currentMove)
+        {
+            //this.transform.position = Vector3.MoveTowards(this.transform.position, spawnPosArray[currentMove], moveSpeed * Time.deltaTime);
+            GameObject parent = GameObject.Find("PlayerPosition");
+            parent.transform.position = Vector3.MoveTowards(parent.transform.position, spawnPosArray[currentMove], moveSpeed * Time.deltaTime);
+
+            if (m_Animator.GetBool("isIdle"))
+                m_Animator.SetBool("isIdle", false);
         }
     }
 
@@ -118,6 +126,9 @@ public class PlayerController : MonoBehaviour
             count++;
             currentMove++;
             SetCountText();
+
+            if (!m_Animator.GetBool("isIdle"))
+                m_Animator.SetBool("isIdle", true);
         }
     }
 
