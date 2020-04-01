@@ -76,19 +76,9 @@ public class PlayerController : MonoBehaviour
                     spawnPosArray[currentSpawn++] = moveToPostion;
                 }
             }
-
-            /*
-            if (m_Animator.GetBool("isIdle"))
-            {
-                Debug.Log("isIdle = True");
-            }
-            else
-            {
-                Debug.Log("isIdle = False");
-            }
-            */
         }
 
+        //Debug.Log(currentSpawn + "/" + currentMove);
         if(currentSpawn > currentMove)
         {
             //this.transform.position = Vector3.MoveTowards(this.transform.position, spawnPosArray[currentMove], moveSpeed * Time.deltaTime);
@@ -102,22 +92,14 @@ public class PlayerController : MonoBehaviour
                 m_Animator.Play("RunPlayer");
             }
         }
-    }
 
-    void FixedUpdate()
-    {
-        float moveH = Input.GetAxis("Horizontal");
-        float moveV = Input.GetAxis("Vertical");
-
-        Vector3 mov = new Vector3 (moveH, 0.0f, moveV);
-
-        rb.AddForce(mov * speed);
-
-        if((Input.GetKeyDown(KeyCode.Space) || count >= 12) && isGround)
+        GameObject obj = GameObject.FindGameObjectWithTag("PickupExit");
+        if(obj != null)
         {
-            //OnJump();
+            ResetPickup(obj);
         }
     }
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -125,7 +107,10 @@ public class PlayerController : MonoBehaviour
         if(other.gameObject.CompareTag("Pick Up"))
         {
             //other.gameObject.SetActive(false);
-            other.gameObject.Kill();
+            //other.gameObject.Kill();
+            other.gameObject.GetComponent<BoxCollider>().isTrigger = false;
+            other.gameObject.GetComponent<Animator>().SetBool("isActive", false);
+            other.gameObject.tag = "PickupExit";
             count++;
             currentMove++;
             SetCountText();
@@ -155,10 +140,22 @@ public class PlayerController : MonoBehaviour
         if (pickup != null) {
             pickup.transform.position = moveToPostion;
             pickup.GetComponent<Animator>().SetInteger("ColorState", (colorState++)%3);
-            Debug.Log("Spawn color: " + pickup.GetComponent<Animator>().GetInteger("ColorState"));
+            //Debug.Log("Spawn color: " + pickup.GetComponent<Animator>().GetInteger("ColorState"));
             pickup.SetActive(true);
             return true;
         }                
         return false;    
+    }
+
+    private void ResetPickup(GameObject obj)
+    {
+        if(obj.gameObject.GetComponent<PickupAnimationEvent>().isReset)
+        {
+            obj.gameObject.GetComponent<BoxCollider>().isTrigger = true;
+            obj.gameObject.gameObject.tag = "Pick Up";
+            obj.gameObject.SetActive(false);
+            obj.gameObject.Kill();
+            Debug.Log("Reset Pickups");
+        }
     }
 }

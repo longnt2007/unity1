@@ -133,7 +133,6 @@ public class Pool : MonoBehaviour
     /// <param name="obj"></param>
     public void Kill(GameObject obj)
     {
-        //Debug.Log("aliveInstances = " + aliveInstances.Count);
         int index = aliveInstances.FindIndex(o => obj == o);
         if (index == -1 || ShouldRemove == true)
         {
@@ -150,6 +149,19 @@ public class Pool : MonoBehaviour
 
         aliveInstances.RemoveAt(index);
         pooledInstances.Push(obj);
+    }
+
+    public void CheckUpdate(GameObject obj)
+    {
+        //foreach(GameObject obj in aliveInstances)
+        {
+            //Debug.Log("Obj name: " + obj.tag);
+            if(obj.CompareTag("PickupExit"))
+            {
+                int index = aliveInstances.FindIndex(o => obj == o);
+                Debug.Log("Found die at index " + index);
+            }
+        }
     }
 
     public bool IsResponsibleForObject(GameObject obj)

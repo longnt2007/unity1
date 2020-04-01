@@ -87,4 +87,12 @@ public class PoolManager : MonoBehaviour
                 + "- From Giang with love.");
         Destroy(obj);
     }
+
+    public static void CheckUpdate(GameObject obj)
+    {
+        foreach (KeyValuePair<GameObject, Pool> pool in currentPools)
+        {
+            pool.Value.CheckUpdate(obj);
+        }
+    }
 }
