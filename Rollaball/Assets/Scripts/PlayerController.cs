@@ -122,8 +122,14 @@ public class PlayerController : MonoBehaviour
                 m_Animator.Rebind();
                 m_Animator.SetBool("isIdle", true);
                 m_Animator.Play("IdlePlayer");
+
             }
         }
+    }
+
+    void LateUpdate()
+    {
+        this.transform.localRotation = Quaternion.Euler(new Vector3(0,0,0));
     }
 
     void SetCountText()
