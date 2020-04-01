@@ -27,8 +27,7 @@ public class PlayerController : MonoBehaviour
     private Vector3[] spawnPosArray;
 
     Animator m_Animator;
-    Vector3 localPos;
-    bool wasPlaying;
+    private int colorState;
 
     // Start is called before the first frame update
     void Start()
@@ -46,7 +45,7 @@ public class PlayerController : MonoBehaviour
         spawnPosArray = new Vector3[maxSpawn];
 
         m_Animator = gameObject.GetComponent<Animator>();
-        localPos = this.transform.position;
+        colorState = 0;
     }
 
     void OnCollisionStay()
@@ -155,10 +154,9 @@ public class PlayerController : MonoBehaviour
         GameObject pickup = myPrefab.Spawn();
         if (pickup != null) {
             pickup.transform.position = moveToPostion;
+            pickup.GetComponent<Animator>().SetInteger("ColorState", (colorState++)%3);
+            Debug.Log("Spawn color: " + pickup.GetComponent<Animator>().GetInteger("ColorState"));
             pickup.SetActive(true);
-            //pickup.GetComponent<MeshRenderer>().material.color = new Color(Random.value, Random.value, Random.value);
-            pickup.GetComponent<Animator>().SetInteger("ColorState", 2);
-            pickup.GetComponent<Animator>().Rebind();
             return true;
         }                
         return false;    
