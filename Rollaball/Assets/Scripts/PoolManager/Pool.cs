@@ -26,6 +26,9 @@ public class Pool : MonoBehaviour
     [SerializeField]
     int initialPoolsize = 10;
 
+    public bool ShouldExpand = true;
+    private int orginalPoolsize;
+
     Stack<GameObject> pooledInstances;
     List<GameObject> aliveInstances;
 
@@ -47,6 +50,8 @@ public class Pool : MonoBehaviour
         }
 
         aliveInstances = new List<GameObject>();
+
+        orginalPoolsize = initialPoolsize;
     }
 
     /// <summary>
@@ -61,8 +66,15 @@ public class Pool : MonoBehaviour
         bool useLocalPosition = false,
         bool useLocalRotation = false)
     {
+        Debug.Log("Spawn: pooledInstances.Count = " + pooledInstances.Count);
         if (pooledInstances.Count <= 0) // Every game object has been spawned!
         {
+            if(ShouldExpand == false)
+            {
+                Debug.Log("Pool is FULL");
+                return null;
+            }
+
             GameObject newlyInstantiatedObject = Instantiate(prefab);
 
             newlyInstantiatedObject.transform.SetParent(parent);

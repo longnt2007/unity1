@@ -64,8 +64,11 @@ public class PlayerController : MonoBehaviour
             {
                 //Debug.Log("Spawn:" + hit.point.x.ToString("F3") + "/" + hit.point.y.ToString("F3"));
                 moveToPostion = new Vector3(hit.point.x, 0.5f, hit.point.z);
-                spawnPosArray[currentSpawn++] = moveToPostion;
-                SpawnPool(moveToPostion);
+                bool isSpawned = SpawnPool(moveToPostion);
+                if(isSpawned)
+                {
+                    spawnPosArray[currentSpawn++] = moveToPostion;
+                }
             }
         }
 
@@ -112,13 +115,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void SpawnPool(Vector3 pos)
+    bool SpawnPool(Vector3 pos)
     {
         //GameObject pickup = ObjectPooler.SharedInstance.GetPooledObject(); 
         GameObject pickup = myPrefab.Spawn();
         if (pickup != null) {
             pickup.transform.position = moveToPostion;
             pickup.SetActive(true);
-        }                    
+            return true;
+        }                
+        return false;    
     }
 }
