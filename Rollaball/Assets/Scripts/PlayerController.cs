@@ -97,7 +97,11 @@ public class PlayerController : MonoBehaviour
             parent.transform.position = Vector3.MoveTowards(parent.transform.position, spawnPosArray[currentMove], moveSpeed * Time.deltaTime);
 
             if (m_Animator.GetBool("isIdle"))
+            {
+                m_Animator.Rebind();
                 m_Animator.SetBool("isIdle", false);
+                m_Animator.Play("RunPlayer");
+            }
         }
     }
 
@@ -127,8 +131,12 @@ public class PlayerController : MonoBehaviour
             currentMove++;
             SetCountText();
 
-            if (!m_Animator.GetBool("isIdle"))
+            if(currentMove == currentSpawn)
+            {
+                m_Animator.Rebind();
                 m_Animator.SetBool("isIdle", true);
+                m_Animator.Play("IdlePlayer");
+            }
         }
     }
 
