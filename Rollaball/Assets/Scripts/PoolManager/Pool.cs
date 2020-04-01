@@ -28,6 +28,8 @@ public class Pool : MonoBehaviour
 
     public bool ShouldExpand = true;
     private int orginalPoolsize;
+    public bool ShouldRemove = true;
+    private string groupParentName;
 
     Stack<GameObject> pooledInstances;
     List<GameObject> aliveInstances;
@@ -66,18 +68,25 @@ public class Pool : MonoBehaviour
         bool useLocalPosition = false,
         bool useLocalRotation = false)
     {
-        Debug.Log("Spawn: pooledInstances.Count = " + pooledInstances.Count);
+        //Debug.Log("Spawn: pooledInstances.Count = " + pooledInstances.Count);
+        //Debug.Log("Spawn: aliveInstances.Count = " + pooledInstances.Count);
+        //GameObject customParent = GameObject.Find("PickUpSpawn");
+        //if(customParent != null)
+        //{
+            //Debug.Log("Found PickUpSpawn");
+        //}
         if (pooledInstances.Count <= 0) // Every game object has been spawned!
         {
             if(ShouldExpand == false)
             {
-                Debug.Log("Pool is FULL");
                 return null;
             }
 
             GameObject newlyInstantiatedObject = Instantiate(prefab);
 
-            newlyInstantiatedObject.transform.SetParent(parent);
+            //newlyInstantiatedObject.transform.SetParent(parent);
+            newlyInstantiatedObject.transform.SetParent(GameObject.Find("PickUpSpawn").transform);
+            
 
             if (useLocalPosition)
                 newlyInstantiatedObject.transform.localPosition = position;
@@ -97,7 +106,7 @@ public class Pool : MonoBehaviour
 
         GameObject obj = pooledInstances.Pop();
 
-        obj.transform.SetParent(parent);
+        obj.transform.SetParent(GameObject.Find("PickUpSpawn").transform);
 
         if (useLocalPosition)
             obj.transform.localPosition = position;
@@ -124,6 +133,7 @@ public class Pool : MonoBehaviour
     /// <param name="obj"></param>
     public void Kill(GameObject obj)
     {
+        //Debug.Log("aliveInstances = " + aliveInstances.Count);
         int index = aliveInstances.FindIndex(o => obj == o);
         if (index == -1)
         {
