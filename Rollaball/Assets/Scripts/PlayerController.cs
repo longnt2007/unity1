@@ -21,7 +21,9 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed;
 
     public GameObject myPrefab;
-    private int maxSpawn = 9999;
+    private int maxSpawn;
+    private int currentMove;
+    private int currentSpawn;
     private Vector3[] spawnPosArray;
 
     // Start is called before the first frame update
@@ -34,6 +36,9 @@ public class PlayerController : MonoBehaviour
         winText.text = "";
 
         moveToPostion = this.transform.position;
+        maxSpawn = 9999;
+        currentMove = 0;
+        currentSpawn = 0;
         spawnPosArray = new Vector3[maxSpawn];
     }
 
@@ -57,19 +62,28 @@ public class PlayerController : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if(Physics.Raycast(ray,out hit, raylength, layerMask))
             {
-                Debug.Log(hit.point.x.ToString("F3") + "/" + hit.point.y.ToString("F3"));
+                //Debug.Log("Spawn:" + hit.point.x.ToString("F3") + "/" + hit.point.y.ToString("F3"));
                 
                 //if(moveToPostion == this.transform.position)
                 {
                     moveToPostion = new Vector3(hit.point.x, 0.5f, hit.point.z);
-                    Instantiate(myPrefab, new Vector3(hit.point.x, 0.5f, hit.point.z), Quaternion.identity);
+                    spawnPosArray[currentSpawn++] = moveToPostion;
+                    GameObject spawnPickup = Instantiate(myPrefab, new Vector3(hit.point.x, 0.5f, hit.point.z), Quaternion.identity);
+                    //spawnPickup.gameObject.tag = "Pick Up";
+                    //spawnPickup.GetComponent<Collider>().enabled = false;
+                    //spawnPickup.GetComponent<Collider>().enabled = true;
                 }
             }
         }
 
-        if(this.transform.position != moveToPostion)
+        //if(this.transform.position != moveToPostion)
+        //{
+            //this.transform.position = Vector3.MoveTowards(this.transform.position, moveToPostion, moveSpeed * Time.deltaTime );
+        //}
+
+        if(currentSpawn > currentMove)
         {
-            this.transform.position = Vector3.MoveTowards(this.transform.position, moveToPostion, moveSpeed * Time.deltaTime );
+            this.transform.position = Vector3.MoveTowards(this.transform.position, spawnPosArray[currentMove], moveSpeed * Time.deltaTime );
         }
     }
 
@@ -90,10 +104,12 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Got " + other.gameObject.tag);
         if(other.gameObject.CompareTag("Pick Up"))
         {
             other.gameObject.SetActive(false);
             count++;
+            currentMove++;
             SetCountText();
         }
     }
