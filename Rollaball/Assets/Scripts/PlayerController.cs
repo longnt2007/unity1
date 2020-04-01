@@ -69,6 +69,7 @@ public class PlayerController : MonoBehaviour
                     moveToPostion = new Vector3(hit.point.x, 0.5f, hit.point.z);
                     spawnPosArray[currentSpawn++] = moveToPostion;
                     GameObject spawnPickup = Instantiate(myPrefab, new Vector3(hit.point.x, 0.5f, hit.point.z), Quaternion.identity);
+                    spawnPickup.GetComponent<MeshRenderer>().material.color = new Color(Random.value, Random.value, Random.value);
                     //spawnPickup.gameObject.tag = "Pick Up";
                     //spawnPickup.GetComponent<Collider>().enabled = false;
                     //spawnPickup.GetComponent<Collider>().enabled = true;
