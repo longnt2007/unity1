@@ -68,11 +68,9 @@ public class PlayerController : MonoBehaviour
                 {
                     moveToPostion = new Vector3(hit.point.x, 0.5f, hit.point.z);
                     spawnPosArray[currentSpawn++] = moveToPostion;
-                    GameObject spawnPickup = Instantiate(myPrefab, new Vector3(hit.point.x, 0.5f, hit.point.z), Quaternion.identity);
-                    spawnPickup.GetComponent<MeshRenderer>().material.color = new Color(Random.value, Random.value, Random.value);
-                    //spawnPickup.gameObject.tag = "Pick Up";
-                    //spawnPickup.GetComponent<Collider>().enabled = false;
-                    //spawnPickup.GetComponent<Collider>().enabled = true;
+                    //GameObject spawnPickup = Instantiate(myPrefab, new Vector3(hit.point.x, 0.5f, hit.point.z), Quaternion.identity);
+                    //spawnPickup.GetComponent<MeshRenderer>().material.color = new Color(Random.value, Random.value, Random.value);
+                    SpawnPool(moveToPostion);
                 }
             }
         }
@@ -109,6 +107,7 @@ public class PlayerController : MonoBehaviour
         if(other.gameObject.CompareTag("Pick Up"))
         {
             other.gameObject.SetActive(false);
+            //Destroy(other.gameObject);
             count++;
             currentMove++;
             SetCountText();
@@ -122,5 +121,17 @@ public class PlayerController : MonoBehaviour
         {
             winText.text = "You Win !";
         }
+    }
+
+    void SpawnPool(Vector3 pos)
+    {
+        Debug.Log("SpawnPool");
+        GameObject pickup = ObjectPooler.SharedInstance.GetPooledObject(); 
+        Debug.Log("SpawnPool222");
+        if (pickup != null) {
+            Debug.Log("SpawnPool333");
+            pickup.transform.position = moveToPostion;
+            pickup.SetActive(true);
+        }                    
     }
 }
