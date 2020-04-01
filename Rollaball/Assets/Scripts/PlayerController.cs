@@ -20,6 +20,10 @@ public class PlayerController : MonoBehaviour
     public Vector3 moveToPostion;
     public float moveSpeed;
 
+    public GameObject myPrefab;
+    private int maxSpawn = 9999;
+    private Vector3[] spawnPosArray;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +34,7 @@ public class PlayerController : MonoBehaviour
         winText.text = "";
 
         moveToPostion = this.transform.position;
+        spawnPosArray = new Vector3[maxSpawn];
     }
 
     void OnCollisionStay()
@@ -57,6 +62,7 @@ public class PlayerController : MonoBehaviour
                 //if(moveToPostion == this.transform.position)
                 {
                     moveToPostion = new Vector3(hit.point.x, 0.5f, hit.point.z);
+                    Instantiate(myPrefab, new Vector3(hit.point.x, 0.5f, hit.point.z), Quaternion.identity);
                 }
             }
         }
@@ -78,7 +84,7 @@ public class PlayerController : MonoBehaviour
 
         if((Input.GetKeyDown(KeyCode.Space) || count >= 12) && isGround)
         {
-            OnJump();
+            //OnJump();
         }
     }
 
