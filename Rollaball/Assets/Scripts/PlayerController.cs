@@ -109,7 +109,9 @@ public class PlayerController : MonoBehaviour
             //other.gameObject.SetActive(false);
             //other.gameObject.Kill();
             other.gameObject.GetComponent<BoxCollider>().isTrigger = false;
+            other.gameObject.GetComponent<Animator>().Rebind();
             other.gameObject.GetComponent<Animator>().SetBool("isActive", false);
+            other.gameObject.GetComponent<Animator>().Play("PickupFadeout");
             other.gameObject.tag = "PickupExit";
             count++;
             currentMove++;
@@ -140,6 +142,7 @@ public class PlayerController : MonoBehaviour
         if (pickup != null) {
             pickup.transform.position = moveToPostion;
             pickup.GetComponent<Animator>().SetInteger("ColorState", (colorState++)%3);
+            pickup.GetComponent<Animator>().SetBool("isActive", true);
             //Debug.Log("Spawn color: " + pickup.GetComponent<Animator>().GetInteger("ColorState"));
             pickup.SetActive(true);
             return true;
@@ -151,6 +154,7 @@ public class PlayerController : MonoBehaviour
     {
         if(obj.gameObject.GetComponent<PickupAnimationEvent>().isReset)
         {
+            obj.gameObject.GetComponent<PickupAnimationEvent>().isReset = false;
             obj.gameObject.GetComponent<BoxCollider>().isTrigger = true;
             obj.gameObject.gameObject.tag = "Pick Up";
             obj.gameObject.SetActive(false);
