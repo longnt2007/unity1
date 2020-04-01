@@ -135,7 +135,7 @@ public class Pool : MonoBehaviour
     {
         //Debug.Log("aliveInstances = " + aliveInstances.Count);
         int index = aliveInstances.FindIndex(o => obj == o);
-        if (index == -1)
+        if (index == -1 || ShouldRemove == true)
         {
             Destroy(obj);
             return;
