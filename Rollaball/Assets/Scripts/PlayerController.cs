@@ -150,8 +150,8 @@ public class PlayerController : MonoBehaviour
                 m_malcomAnimator.Play("Idle");
                 
                 Transform malcom = GameObject.Find("malcolm").transform;
-                //malcom.rotation = malcomOrginalRotation;
-                malcom.position = this.transform.position;
+                float currentRotY = malcom.rotation.eulerAngles.y;
+                malcom.localRotation = Quaternion.Euler(0, currentRotY, 0);
             }
             else
             {
