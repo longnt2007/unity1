@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
 
     //Transform malcom;
     Animator m_malcomAnimator;
+    Quaternion malcomOrginalRotation;
 
     // Start is called before the first frame update
     void Start()
@@ -51,6 +52,8 @@ public class PlayerController : MonoBehaviour
         colorState = 0;
 
         m_malcomAnimator = GameObject.Find("malcolm").GetComponent<Animator>();
+        Transform malcom = GameObject.Find("malcolm").transform;
+        malcomOrginalRotation = malcom.rotation;
     }
 
     void OnCollisionStay()
@@ -145,6 +148,10 @@ public class PlayerController : MonoBehaviour
                 m_malcomAnimator.Rebind();
                 m_malcomAnimator.SetBool("isIdle", true);
                 m_malcomAnimator.Play("Idle");
+                
+                Transform malcom = GameObject.Find("malcolm").transform;
+                //malcom.rotation = malcomOrginalRotation;
+                malcom.position = this.transform.position;
             }
             else
             {
