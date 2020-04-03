@@ -109,8 +109,8 @@ public class PlayerController : MonoBehaviour
                 m_malcomAnimator.Play("Walking");
 
                 Transform malcom = GameObject.Find("malcolm").transform;
-                Vector3 relativePos = spawnPosArray[currentMove] - malcom.position;
-                Quaternion rotation = Quaternion.LookRotation(relativePos, Vector3.up);
+                Vector3 relativePos = spawnPosArray[currentMove] - this.transform.position;
+                Quaternion rotation = Quaternion.LookRotation(relativePos);
                 malcom.rotation = rotation;
             }
         }
@@ -156,8 +156,8 @@ public class PlayerController : MonoBehaviour
             else
             {
                 Transform malcom = GameObject.Find("malcolm").transform;
-                Vector3 relativePos = spawnPosArray[currentMove] - malcom.position;
-                Quaternion rotation = Quaternion.LookRotation(relativePos, Vector3.up);
+                Vector3 relativePos = spawnPosArray[currentMove] - this.transform.position;
+                Quaternion rotation = Quaternion.LookRotation(relativePos);
                 malcom.rotation = rotation;
             }
         }
