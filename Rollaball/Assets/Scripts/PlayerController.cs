@@ -147,7 +147,8 @@ public class PlayerController : MonoBehaviour
         GameObject pickup = myPrefab.Spawn();
         if (pickup != null) {
             pickup.transform.position = moveToPostion;
-            pickup.GetComponent<Animator>().SetInteger("ColorState", (colorState++)%3);
+            //pickup.GetComponent<Animator>().SetInteger("ColorState", (colorState++)%3);
+            pickup.GetComponent<Animator>().SetInteger("ColorState", (Random.Range(0,100)%3));
             pickup.GetComponent<Animator>().SetBool("isActive", true);
             //Debug.Log("Spawn color: " + pickup.GetComponent<Animator>().GetInteger("ColorState"));
             pickup.SetActive(true);
