@@ -29,6 +29,9 @@ public class PlayerController : MonoBehaviour
     Animator m_Animator;
     private int colorState;
 
+    //Transform malcom;
+    Animator m_malcomAnimator;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,6 +49,8 @@ public class PlayerController : MonoBehaviour
 
         m_Animator = gameObject.GetComponent<Animator>();
         colorState = 0;
+
+        m_malcomAnimator = GameObject.Find("malcolm").GetComponent<Animator>();
     }
 
     void OnCollisionStay()
@@ -85,11 +90,25 @@ public class PlayerController : MonoBehaviour
             GameObject parent = GameObject.Find("PlayerPosition");
             parent.transform.position = Vector3.MoveTowards(parent.transform.position, spawnPosArray[currentMove], moveSpeed * Time.deltaTime);
 
+            /*
             if (m_Animator.GetBool("isIdle"))
             {
                 m_Animator.Rebind();
                 m_Animator.SetBool("isIdle", false);
                 m_Animator.Play("RunPlayer");
+            }
+            */
+
+            if (m_malcomAnimator.GetBool("isIdle"))
+            {
+                m_malcomAnimator.Rebind();
+                m_malcomAnimator.SetBool("isIdle", false);
+                m_malcomAnimator.Play("Walking");
+
+                Transform malcom = GameObject.Find("malcolm").transform;
+                Vector3 relativePos = spawnPosArray[currentMove] - malcom.position;
+                Quaternion rotation = Quaternion.LookRotation(relativePos, Vector3.up);
+                malcom.rotation = rotation;
             }
         }
 
@@ -119,10 +138,20 @@ public class PlayerController : MonoBehaviour
 
             if(currentMove == currentSpawn)
             {
-                m_Animator.Rebind();
-                m_Animator.SetBool("isIdle", true);
-                m_Animator.Play("IdlePlayer");
+                //m_Animator.Rebind();
+                //m_Animator.SetBool("isIdle", true);
+                //m_Animator.Play("IdlePlayer");
 
+                m_malcomAnimator.Rebind();
+                m_malcomAnimator.SetBool("isIdle", true);
+                m_malcomAnimator.Play("Idle");
+            }
+            else
+            {
+                Transform malcom = GameObject.Find("malcolm").transform;
+                Vector3 relativePos = spawnPosArray[currentMove] - malcom.position;
+                Quaternion rotation = Quaternion.LookRotation(relativePos, Vector3.up);
+                malcom.rotation = rotation;
             }
         }
     }
