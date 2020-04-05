@@ -42,7 +42,7 @@ public abstract class MovingObject : MonoBehaviour
             Vector3 newPosition = Vector3.MoveTowards(rb2D.position, end, inverseMoveTime * Time.deltaTime);
             rb2D.MovePosition(newPosition);
             sqrRemainingDistance = (transform.position - end).sqrMagnitude;
-            yield return null
+            yield return null;
         }
     }
 
@@ -60,9 +60,7 @@ public abstract class MovingObject : MonoBehaviour
         if(!canMove && hitComponent != null)
             OnCantMove(hitComponent);
     }
+
     protected abstract void OnCantMove <T> (T component)
         where T : Component;
-    {
-
-    }
 }
