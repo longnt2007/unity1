@@ -1,6 +1,6 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class BoardManager : MonoBehaviour
@@ -63,7 +63,7 @@ public class BoardManager : MonoBehaviour
             }
         }
     }
-
+    
     Vector3 RandomPosition()
     {
         int randomIndex = Random.Range(0, gridPositions.Count);
@@ -82,6 +82,7 @@ public class BoardManager : MonoBehaviour
             Instantiate(tileChoice, randomPosition, Quaternion.identity);
         }
     }
+
     public void SetupScene(int level)
     {
         BoardSetup();
