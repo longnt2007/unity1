@@ -5847,6 +5847,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 002d9b99881493544b8116999e5bbef1, type: 3}
+--- !u!1 &829999114 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: d5d0a4047b5d9bc4fbc3cc1c0bb8ba50,
+    type: 3}
+  m_PrefabInstance: {fileID: 890435749}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &829999116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829999114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6f87225d7b3335408ed2815c18a4932, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &890435749
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6271,6 +6289,8 @@ MonoBehaviour:
   moveToPostion: {x: 0, y: 0, z: 0}
   moveSpeed: 10
   myPrefab: {fileID: 3654470732795988046, guid: 002d9b99881493544b8116999e5bbef1,
+    type: 3}
+  spawnEffect: {fileID: 1273915125232972, guid: 73767e07adddc394d82b994801f89bbb,
     type: 3}
 --- !u!54 &963077729
 Rigidbody:

@@ -5,18 +5,15 @@ using UnityEngine;
 public class PickupAnimationEvent : MonoBehaviour
 {
     public GameObject prefab;
-
     public bool isReset = false;
-
     private GameObject instance;
     private bool isSetup = false;
     Quaternion rotation;
 
     public void PrintEvent(string s)
     {
-        //Debug.Log("PrintEvent: " + s + " called at: " + Time.time);
         isReset = true;
-        instance.SetActive(false);
+        SetActive(false);
     }
 
     void Awake()
@@ -27,22 +24,26 @@ public class PickupAnimationEvent : MonoBehaviour
             rotation = instance.transform.rotation;
             instance.transform.SetParent(transform);
             instance.transform.localPosition = Vector3.zero;
-            instance.transform.localScale = Vector3.one;
-            instance.transform.localEulerAngles = Vector3.zero;
+            SetActive(false);
             isSetup = true;
         }
-        instance.SetActive(true);
     }
 
     void LateUpdate()
     {
-        //instance.transform.localRotation = Quaternion.Euler(new Vector3(0,0,0));
         instance.transform.rotation = rotation;
     }
 
     public void Reset()
     {
         isReset = false;
-        instance.SetActive(true);
+        SetActive(false);
     }
+
+    public void SetActive(bool active)
+    {
+        //Debug.Log("Pickup SetActive");
+        instance.SetActive(active);
+    }
+
 }

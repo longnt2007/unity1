@@ -33,6 +33,15 @@ public class PlayerController : MonoBehaviour
     Animator m_malcomAnimator;
     Quaternion malcomOrginalRotation;
 
+    private Vector3 startPosition;
+    private bool isDie = false;
+    private IEnumerator coroutine;
+    private GameObject malcom;
+    public GameObject spawnEffect;
+    private GameObject spawnInstance;
+    Quaternion spawnrotation;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,7 +51,7 @@ public class PlayerController : MonoBehaviour
         SetCountText();
         winText.text = "";
 
-        moveToPostion = this.transform.position;
+        startPosition = moveToPostion = this.transform.position;
         maxSpawn = 9999;
         currentMove = 0;
         currentSpawn = 0;
@@ -52,8 +61,14 @@ public class PlayerController : MonoBehaviour
         colorState = 0;
 
         m_malcomAnimator = GameObject.Find("malcolm").GetComponent<Animator>();
-        Transform malcom = GameObject.Find("malcolm").transform;
-        malcomOrginalRotation = malcom.rotation;
+        malcom = GameObject.Find("malcolm");
+        malcomOrginalRotation = malcom.transform.rotation;
+
+        spawnInstance = Instantiate(spawnEffect);
+        spawnrotation = spawnInstance.transform.rotation;
+        spawnInstance.transform.SetParent(transform);
+        spawnInstance.transform.localPosition = Vector3.zero;
+        spawnInstance.SetActive(false);
     }
 
     void OnCollisionStay()
@@ -86,12 +101,13 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        //Debug.Log(currentSpawn + "/" + currentMove);
         if(currentSpawn > currentMove)
         {
             //this.transform.position = Vector3.MoveTowards(this.transform.position, spawnPosArray[currentMove], moveSpeed * Time.deltaTime);
             GameObject parent = GameObject.Find("PlayerPosition");
             parent.transform.position = Vector3.MoveTowards(parent.transform.position, spawnPosArray[currentMove], moveSpeed * Time.deltaTime);
+            winText.text = "";
+            isDie = false;
 
             if (m_malcomAnimator.GetBool("isIdle"))
             {
@@ -99,10 +115,9 @@ public class PlayerController : MonoBehaviour
                 m_malcomAnimator.SetBool("isIdle", false);
                 m_malcomAnimator.Play("Walking");
 
-                Transform malcom = GameObject.Find("malcolm").transform;
                 Vector3 relativePos = spawnPosArray[currentMove] - this.transform.position;
                 Quaternion rotation = Quaternion.LookRotation(relativePos);
-                malcom.rotation = rotation;
+                malcom.transform.rotation = rotation;
             }
         }
 
@@ -121,35 +136,43 @@ public class PlayerController : MonoBehaviour
         {
             //other.gameObject.SetActive(false);
             //other.gameObject.Kill();
+            int color = other.gameObject.GetComponent<Animator>().GetInteger("ColorState");
+            Debug.Log("OnTriggerEnter " + color);
+            if(color == 1)
+            {
+                other.gameObject.GetComponent<PickupAnimationEvent>().SetActive(true);
+                isDie = true;
+                ResetPlayer();
+            }
+
             other.gameObject.GetComponent<BoxCollider>().isTrigger = false;
             other.gameObject.GetComponent<Animator>().Rebind();
             other.gameObject.GetComponent<Animator>().SetBool("isActive", false);
             other.gameObject.GetComponent<Animator>().Play("PickupFadeout");
             other.gameObject.tag = "PickupExit";
             count++;
-            currentMove++;
+            if(isDie)
+                currentMove = currentSpawn;
+            else
+                currentMove++;
             SetCountText();
 
             if(currentMove == currentSpawn)
             {
-                //m_Animator.Rebind();
-                //m_Animator.SetBool("isIdle", true);
-                //m_Animator.Play("IdlePlayer");
-
                 m_malcomAnimator.Rebind();
                 m_malcomAnimator.SetBool("isIdle", true);
                 m_malcomAnimator.Play("Idle");
                 
-                Transform malcom = GameObject.Find("malcolm").transform;
-                float currentRotY = malcom.rotation.eulerAngles.y;
-                malcom.localRotation = Quaternion.Euler(0, currentRotY, 0);
+                //Transform malcom = GameObject.Find("malcolm").transform;
+                float currentRotY = malcom.transform.rotation.eulerAngles.y;
+                malcom.transform.localRotation = Quaternion.Euler(0, currentRotY, 0);
             }
             else
             {
-                Transform malcom = GameObject.Find("malcolm").transform;
+                //Transform malcom = GameObject.Find("malcolm").transform;
                 Vector3 relativePos = spawnPosArray[currentMove] - this.transform.position;
                 Quaternion rotation = Quaternion.LookRotation(relativePos);
-                malcom.rotation = rotation;
+                malcom.transform.rotation = rotation;
             }
         }
     }
@@ -162,7 +185,7 @@ public class PlayerController : MonoBehaviour
     void SetCountText()
     {
         countText.text = "Count: " + count.ToString();
-        if(count >= 12)
+        if(count >= 12 && !isDie)
         {
             winText.text = "You Win !";
         }
@@ -174,8 +197,8 @@ public class PlayerController : MonoBehaviour
         GameObject pickup = myPrefab.Spawn();
         if (pickup != null) {
             pickup.transform.position = moveToPostion;
-            //pickup.GetComponent<Animator>().SetInteger("ColorState", (colorState++)%3);
-            pickup.GetComponent<Animator>().SetInteger("ColorState", (Random.Range(0,100)%3));
+            int color = Random.Range(0,100)%3;
+            pickup.GetComponent<Animator>().SetInteger("ColorState", color);
             pickup.GetComponent<Animator>().SetBool("isActive", true);
             //Debug.Log("Spawn color: " + pickup.GetComponent<Animator>().GetInteger("ColorState"));
             pickup.SetActive(true);
@@ -196,4 +219,32 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Reset Pickups");
         }
     }
+
+    private void ResetPlayer()
+    {
+        print("ResetPlayer: " + Time.time + " seconds");
+        GameObject parent = GameObject.Find("PlayerPosition");
+        parent.transform.position = startPosition;
+        currentMove = currentSpawn;
+        winText.text = "You Die !";
+        count = 0;
+        //malcom.transform.localPosition = new Vector3(999,999,999);
+        malcom.GetComponent<FadeRenderer>().Spawn();
+        //spawnInstance.SetActive(true); //disable smoke and replace with fadein texture
+        coroutine = WaitAndRespawn(2.0f);
+        StartCoroutine(coroutine);        
+    }
+
+    private IEnumerator WaitAndRespawn(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        spawnInstance.SetActive(false);
+        //malcom.SetActive(true);
+        m_malcomAnimator.Rebind();
+        m_malcomAnimator.SetBool("isIdle", true);
+        m_malcomAnimator.Play("Idle");
+        GameObject parent = GameObject.Find("PlayerPosition");
+        malcom.transform.localPosition = new Vector3(0,-0.5f,0);
+        print("Respwan: " + Time.time + " seconds");
+    }    
 }
