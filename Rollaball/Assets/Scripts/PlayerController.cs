@@ -197,7 +197,7 @@ public class PlayerController : MonoBehaviour
     {
         if(obj.gameObject.GetComponent<PickupAnimationEvent>().isReset)
         {
-            obj.gameObject.GetComponent<PickupAnimationEvent>().isReset = false;
+            obj.gameObject.GetComponent<PickupAnimationEvent>().Reset();
             obj.gameObject.GetComponent<BoxCollider>().isTrigger = true;
             obj.gameObject.gameObject.tag = "Pick Up";
             obj.gameObject.SetActive(false);
