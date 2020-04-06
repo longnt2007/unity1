@@ -93,15 +93,6 @@ public class PlayerController : MonoBehaviour
             GameObject parent = GameObject.Find("PlayerPosition");
             parent.transform.position = Vector3.MoveTowards(parent.transform.position, spawnPosArray[currentMove], moveSpeed * Time.deltaTime);
 
-            /*
-            if (m_Animator.GetBool("isIdle"))
-            {
-                m_Animator.Rebind();
-                m_Animator.SetBool("isIdle", false);
-                m_Animator.Play("RunPlayer");
-            }
-            */
-
             if (m_malcomAnimator.GetBool("isIdle"))
             {
                 m_malcomAnimator.Rebind();
