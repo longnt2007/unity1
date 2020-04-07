@@ -137,7 +137,7 @@ public class PlayerController : MonoBehaviour
             //other.gameObject.SetActive(false);
             //other.gameObject.Kill();
             int color = other.gameObject.GetComponent<Animator>().GetInteger("ColorState");
-            Debug.Log("OnTriggerEnter " + color);
+            //Debug.Log("OnTriggerEnter " + color);
             if(color == 1)
             {
                 other.gameObject.GetComponent<PickupAnimationEvent>().SetActive(true);

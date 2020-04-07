@@ -26,7 +26,8 @@ public class FadeRenderer : MonoBehaviour
             foreach (Transform child in transform)
             {
                 Renderer _rend = child.GetComponent<Renderer>();
-                _rend.material.color = new Vector4(_rend.material.color.r, _rend.material.color.g, _rend.material.color.b, Mathf.Lerp(0, 1.0f, (Time.time - time) / spawnTime));
+                if(_rend != null)
+                    _rend.material.color = new Vector4(_rend.material.color.r, _rend.material.color.g, _rend.material.color.b, Mathf.Lerp(0, 1.0f, (Time.time - time) / spawnTime));
             }
 
             if(Time.time > (time + spawnTime))
