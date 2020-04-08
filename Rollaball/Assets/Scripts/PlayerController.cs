@@ -51,6 +51,10 @@ public class PlayerController : MonoBehaviour
     private GameObject optionMenu;
     private GameObject mainMenu;
     private GameObject cutScene;
+    public Text menuText;
+    public float gameTime;
+    public Slider hpBar;
+    private float hpValue;
 
     // Start is called before the first frame update
     void Start()
@@ -92,7 +96,7 @@ public class PlayerController : MonoBehaviour
 		Button btnPause = pauseButton.GetComponent<Button>();
 		pauseButton.onClick.AddListener(OnClickPauseButton);
         timeText.text = "";
-
+        menuText.text = "MainMenu";
         gameState = 0;
         mainMenu = GameObject.Find("MainMenu");
         mainMenu.SetActive(true);
@@ -160,6 +164,15 @@ public class PlayerController : MonoBehaviour
         if(obj != null)
         {
             ResetPickup(obj);
+        }
+
+        if(hpValue < hpBar.value)
+        {
+            hpBar.value -= 0.01f;
+        }
+        else
+        {
+            hpBar.value = hpValue;
         }
     }
 
@@ -263,6 +276,8 @@ public class PlayerController : MonoBehaviour
         currentMove = currentSpawn;
         winText.text = "You Die !";
         count = 0;
+        if(hpValue > 0)
+            hpValue -= 0.2f;
         //malcom.transform.localPosition = new Vector3(999,999,999);
         malcom.GetComponent<FadeRenderer>().Spawn();
         //spawnInstance.SetActive(true); //disable smoke and replace with fadein texture
@@ -287,13 +302,18 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("OnClickPlayButton");
         mainMenu.SetActive(false);
+        menuText.text = "";
         gameState = 1;
+        gameTime = Time.time;
         cutScene.SetActive(true);
+        hpValue = 1;
+        hpBar.value = 1;
     }
     void OnClickOptionButton()
     {
         Debug.Log("OnClickOptionButton");
         optionMenu.SetActive(true);
+        menuText.text = "OptionMenu";
         mainMenu.SetActive(false);
         gameState = 2;
     }
@@ -306,6 +326,7 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("OnClickBackButton");
         mainMenu.SetActive(true);
+        menuText.text = "MainMenu";
         optionMenu.SetActive(false);
         gameState = 0;
     }
@@ -314,13 +335,15 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("OnClickPauseButton");
         mainMenu.SetActive(true);
+        menuText.text = "MainMenu";
         gameState = 0;
         timeText.text = "";
+        winText.text = "";
     }
 
     void SetTimeText()
     {
-        timeText.text = "Time: " + Time.time.ToString();
+        timeText.text = "Time: " + (int)(Time.time - gameTime);
     }
 
 }
