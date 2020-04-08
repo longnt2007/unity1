@@ -45,6 +45,8 @@ public class PlayerController : MonoBehaviour
     public Button optionButton;
     public Button exitButton;
     public Button backButton;
+    public Button pauseButton;
+    public Text timeText;
     private int gameState;
     private GameObject optionMenu;
     private GameObject mainMenu;
@@ -87,6 +89,9 @@ public class PlayerController : MonoBehaviour
 		exitButton.onClick.AddListener(OnClickExitButton);
 		Button btnBack = backButton.GetComponent<Button>();
 		backButton.onClick.AddListener(OnClickBackButton);
+		Button btnPause = pauseButton.GetComponent<Button>();
+		pauseButton.onClick.AddListener(OnClickPauseButton);
+        timeText.text = "";
 
         gameState = 0;
         mainMenu = GameObject.Find("MainMenu");
@@ -113,6 +118,7 @@ public class PlayerController : MonoBehaviour
         if(gameState != 1)
             return;
 
+        SetTimeText();
         if(Input.GetMouseButtonDown(0))
         {
             //Debug.Log("Mouse click");
@@ -303,4 +309,18 @@ public class PlayerController : MonoBehaviour
         optionMenu.SetActive(false);
         gameState = 0;
     }
+
+    void OnClickPauseButton()
+    {
+        Debug.Log("OnClickPauseButton");
+        mainMenu.SetActive(true);
+        gameState = 0;
+        timeText.text = "";
+    }
+
+    void SetTimeText()
+    {
+        timeText.text = "Time: " + Time.time.ToString();
+    }
+
 }
