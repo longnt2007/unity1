@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
@@ -41,6 +41,14 @@ public class PlayerController : MonoBehaviour
     private GameObject spawnInstance;
     Quaternion spawnrotation;
 
+    public Button playButton;
+    public Button optionButton;
+    public Button exitButton;
+    public Button backButton;
+    private int gameState;
+    private GameObject optionMenu;
+    private GameObject mainMenu;
+    private GameObject cutScene;
 
     // Start is called before the first frame update
     void Start()
@@ -49,6 +57,7 @@ public class PlayerController : MonoBehaviour
         count = 0;
         jump = new Vector3(0.0f, 2.0f, 0.0f);
         SetCountText();
+        countText.gameObject.SetActive(false);
         winText.text = "";
 
         startPosition = moveToPostion = this.transform.position;
@@ -69,6 +78,23 @@ public class PlayerController : MonoBehaviour
         spawnInstance.transform.SetParent(transform);
         spawnInstance.transform.localPosition = Vector3.zero;
         spawnInstance.SetActive(false);
+
+		Button btnPlay = playButton.GetComponent<Button>();
+		btnPlay.onClick.AddListener(OnClickPlayButton);
+		Button btnOption = optionButton.GetComponent<Button>();
+		optionButton.onClick.AddListener(OnClickOptionButton);
+		Button btnExit = exitButton.GetComponent<Button>();
+		exitButton.onClick.AddListener(OnClickExitButton);
+		Button btnBack = backButton.GetComponent<Button>();
+		backButton.onClick.AddListener(OnClickBackButton);
+
+        gameState = 0;
+        mainMenu = GameObject.Find("MainMenu");
+        mainMenu.SetActive(true);
+        optionMenu = GameObject.Find("OptionMenu");
+        optionMenu.SetActive(false);
+        cutScene = GameObject.Find("Timeline");
+        cutScene.SetActive(false);
     }
 
     void OnCollisionStay()
@@ -84,6 +110,9 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if(gameState != 1)
+            return;
+
         if(Input.GetMouseButtonDown(0))
         {
             //Debug.Log("Mouse click");
@@ -247,4 +276,31 @@ public class PlayerController : MonoBehaviour
         malcom.transform.localPosition = new Vector3(0,-0.5f,0);
         print("Respwan: " + Time.time + " seconds");
     }    
+
+    void OnClickPlayButton()
+    {
+        Debug.Log("OnClickPlayButton");
+        mainMenu.SetActive(false);
+        gameState = 1;
+        cutScene.SetActive(true);
+    }
+    void OnClickOptionButton()
+    {
+        Debug.Log("OnClickOptionButton");
+        optionMenu.SetActive(true);
+        mainMenu.SetActive(false);
+        gameState = 2;
+    }
+    void OnClickExitButton()
+    {
+        Debug.Log("OnClickExitButton");
+        Application.Quit();
+    }
+    void OnClickBackButton()
+    {
+        Debug.Log("OnClickBackButton");
+        mainMenu.SetActive(true);
+        optionMenu.SetActive(false);
+        gameState = 0;
+    }
 }
