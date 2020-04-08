@@ -145,7 +145,7 @@ public class PlayerController : MonoBehaviour
             //this.transform.position = Vector3.MoveTowards(this.transform.position, spawnPosArray[currentMove], moveSpeed * Time.deltaTime);
             GameObject parent = GameObject.Find("PlayerPosition");
             parent.transform.position = Vector3.MoveTowards(parent.transform.position, spawnPosArray[currentMove], moveSpeed * Time.deltaTime);
-            winText.text = "";
+            //winText.text = "";
             isDie = false;
 
             if (m_malcomAnimator.GetBool("isIdle"))
@@ -274,10 +274,10 @@ public class PlayerController : MonoBehaviour
         GameObject parent = GameObject.Find("PlayerPosition");
         parent.transform.position = startPosition;
         currentMove = currentSpawn;
-        winText.text = "You Die !";
         count = 0;
         if(hpValue > 0)
             hpValue -= 0.2f;
+        winText.text = "You Die !";
         //malcom.transform.localPosition = new Vector3(999,999,999);
         malcom.GetComponent<FadeRenderer>().Spawn();
         //spawnInstance.SetActive(true); //disable smoke and replace with fadein texture
